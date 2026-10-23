@@ -2,8 +2,8 @@
 #define FAST_REGION(A) (((A) >> 24) & 7)
 #define FAST_RD8(A) (!RB_AccurateMode && DataFastR[FAST_REGION(A)].base ? DataFastR[FAST_REGION(A)].base[(A) & DataFastR[FAST_REGION(A)].mask] : MemRead8(timestamp, (A)))
 #define FAST_RD16(A) (!RB_AccurateMode && DataFastR[FAST_REGION(A)].base ? LoadU16_LE((uint16 *)&DataFastR[FAST_REGION(A)].base[(A) & DataFastR[FAST_REGION(A)].mask]) : MemRead16(timestamp, (A)))
-#define FAST_WR8(A, V) do { const uint32 fa_ = (A); if (!RB_AccurateMode && DataFastW[FAST_REGION(fa_)].base) { DataFastW[FAST_REGION(fa_)].base[fa_ & DataFastW[FAST_REGION(fa_)].mask] = (V); } else MemWrite8(timestamp, fa_, (V)); } while (0)
-#define FAST_WR16(A, V) do { const uint32 fa_ = (A); if (!RB_AccurateMode && DataFastW[FAST_REGION(fa_)].base) { StoreU16_LE((uint16 *)&DataFastW[FAST_REGION(fa_)].base[fa_ & DataFastW[FAST_REGION(fa_)].mask], (V)); } else MemWrite16(timestamp, fa_, (V)); } while (0)
+#define FAST_WR8(A, V) do { const uint32 fa_ = (A); if (!RB_AccurateMode && DataFastW[FAST_REGION(fa_)].base) { DataFastW[FAST_REGION(fa_)].base[fa_ & DataFastW[FAST_REGION(fa_)].mask] = (V); DataFastWrites++; } else MemWrite8(timestamp, fa_, (V)); } while (0)
+#define FAST_WR16(A, V) do { const uint32 fa_ = (A); if (!RB_AccurateMode && DataFastW[FAST_REGION(fa_)].base) { StoreU16_LE((uint16 *)&DataFastW[FAST_REGION(fa_)].base[fa_ & DataFastW[FAST_REGION(fa_)].mask], (V)); DataFastWrites++; } else MemWrite16(timestamp, fa_, (V)); } while (0)
 /* V810 Emulator
  *
  * Copyright (C) 2006 David Tucker

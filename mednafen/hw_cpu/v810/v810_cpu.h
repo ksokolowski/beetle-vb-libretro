@@ -205,10 +205,14 @@ class V810
  void SetPC(uint32);
 
  uint32 GetPR(const unsigned int which);
+ /* All program registers, for cheap comparison (idle-loop skip). */
+ INLINE const uint32 *GetPRArray(void) const { return P_REG; }
  /* Direct data access for plain memory regions (address bits 24-26), so
   * loads and stores of RAM and ROM skip the handler call. base is NULL for
-  * regions that need the handler. */
+  * regions that need the handler; writes to direct regions are counted in
+  * DataFastWrites. */
  struct { uint8 *base; uint32 mask; } DataFastR[8], DataFastW[8];
+ uint32 DataFastWrites;
  void SetDataFast(unsigned region, uint8 *base, uint32 mask, bool writable)
  {
   DataFastR[region & 7].base = base; DataFastR[region & 7].mask = mask;
